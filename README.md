@@ -15,8 +15,8 @@ my@box:/etc$ cd /usr/local/bin/.../bin/.../bin
 my@box:/bin$
 ```
 ```bash
-my@box:/tmp$ x='a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z'; mkdir -p $x; cd $x
-my@box:/tmp/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z$ cd ...........................
+my@box:/tmp$ x='0/1/2/3/4/5/6/7/8/9'; mkdir -p $x; cd $x
+my@box:/tmp/0/1/2/3/4/5/6/7/8/9$ cd ...........
 my@box:/tmp$
 ```
 ```bash
