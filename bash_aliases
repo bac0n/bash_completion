@@ -27,8 +27,10 @@ cd_undo(){
         for ((z=0; z < (${#x} / 2); z++ )); do
             y+=.
         done
-        READLINE_LINE="cd $(rev <<< ${d:0:(${#d}-${#BASH_REMATCH[0]})}${BASH_REMATCH[1]}${y}${BASH_REMATCH[4]})"
-        READLINE_POINT=${#READLINE_LINE}
+        x=${d:0:(${#d} - ${#BASH_REMATCH[0]})}
+        READLINE_LINE="cd $(rev <<< ${x}${BASH_REMATCH[1]}${y}${BASH_REMATCH[4]})"
+        READLINE_POINT=$((${#READLINE_LINE} - ${#x} - 1))
+        READLINE_LINE=${READLINE_LINE%/}
     fi
 }
 fi
