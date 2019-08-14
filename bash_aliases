@@ -3,23 +3,23 @@
 #
 if [ -n "$PS1" ]; then
 cd(){
-    local d="${@:(-1)}"
+    local d=${@:(-1)}
     local x='' y='' z=3
     while [[ ! -d $d ]] && [[ ${d:${#x}} =~ (^|/)([.]{3,})(/.*)?$ ]]; do
-        x="${d:0:(${#d}-${#BASH_REMATCH[3]})}"
+        x=${d:0:(${#d}-${#BASH_REMATCH[3]})}
         if [[ ! -d $x ]]; then
             y='..'
             for ((z=3; z <= ${#BASH_REMATCH[2]}; z++)); do
                 y+='/..'
             done
-            d="${d:0:(${#d}-${#BASH_REMATCH[0]})}${BASH_REMATCH[1]}${y}${BASH_REMATCH[3]}"
+            d=${d:0:(${#d}-${#BASH_REMATCH[0]})}${BASH_REMATCH[1]}${y}${BASH_REMATCH[3]}
         fi
     done
     builtin pushd "$d" > /dev/null && /bin/ls --almost-all --color=auto
 }
 
 cd_undo(){
-    local d=$(rev <<< ${READLINE_LINE##* })
+    local d=$(rev <<< ${READLINE_LINE#* })
     local x='' y='' z=0
     if [[ ${READLINE_LINE%% *} = cd ]] && [[ $d =~ (^|/)([.]{2}(/[.]{2})+)(/.*)?$ ]]; then
         y=.
