@@ -1,7 +1,6 @@
 #
 # Expand dots to dot-dot component (~/.bash_aliases).
 #
-
 if [ -n "$PS1" ]; then
 cd(){
     local d=${@:(-1)}
@@ -29,7 +28,7 @@ cd_undo(){
     if [[ $d =~ (^|/)([.]{2}(/[.]{2})+)(/.*)?$ ]]; then
         y=.
         x=${BASH_REMATCH[2]//\/}
-        for ((z=0; z < (${#x} / 2); z++ )); do
+        for ((z=0; z < (${#x} / 2); z++)); do
             y+=.
         done
         x=${d:0:(${#d} - ${#BASH_REMATCH[0]})}
@@ -48,13 +47,13 @@ cd_undo(){
         done
     fi
 }
-fi
 
-# bind cd undo to readline keyseq ESC ESC.
-if [[ $(declare -F cd_undo) = cd_undo ]]; then
-    bind -r '"\e\e"'
-    bind -x '"\e\e"  :cd_undo'
-    bind -x '"\e\e\e":cd_undo'
+    # bind cd undo to readline keyseq ESC ESC.
+    if [[ $(declare -F cd_undo) = cd_undo ]]; then
+        bind -r '"\e\e"'
+        bind -x '"\e\e"  :cd_undo'
+        bind -x '"\e\e\e":cd_undo'
+    fi
 fi
 
 ##
