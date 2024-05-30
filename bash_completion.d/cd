@@ -12,6 +12,9 @@ _cd()
 
     # Expand dots to dot-dot component.
     local x='' y='' z=3
+    if [[ $cur =~ ^[+]([0-9]+)$ ]] && [ ! -d "$cur"* ]; then
+        eval printf -v cur .%.0s \{1..${BASH_REMATCH[1]}\}
+    fi
     while [[ ! -d $cur ]] && [[ ${cur:${#x}} =~ (^|/)([.]{3,})(/.*)?$ ]]; do
         if [[ -n $(compgen -d -- $cur) ]]; then
             if [[ $cur == ..+(.) ]] || [[ $cur == */..+(.) ]]; then
@@ -19,13 +22,13 @@ _cd()
             fi
             break
         fi
-        x="${cur:0:(${#cur} - ${#BASH_REMATCH[3]})}"
+        x="${cur:0:(${#cur}-${#BASH_REMATCH[3]})}"
         if [[ ! -d $x ]]; then
             y='..'
             for ((z=3; z <= ${#BASH_REMATCH[2]}; z++)); do
                 y+='/..'
             done
-            cur="${cur:0:(${#cur} - ${#BASH_REMATCH[0]})}${BASH_REMATCH[1]}${y}${BASH_REMATCH[3]}"
+            cur="${cur:0:(${#cur}-${#BASH_REMATCH[0]})}${BASH_REMATCH[1]}${y}${BASH_REMATCH[3]}"
         fi
     done
 
