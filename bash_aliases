@@ -1,10 +1,16 @@
 #
 # Expand dots to dot-dot component (~/.bash_aliases).
 #
-if [ -n "$PS1" ]; then
-cd(){
-    local d=${@:(-1)}
-    local x='' y='' z=3
+__cd__(){
+    local c=$_ x='' y='' z=3
+    (($#>0)) && \
+    local d=${@:(-1)} || d=''
+    if [[ $d = _ ]]; then
+        [[ -d $c ]] && d=$c || d=${c%/*}
+    fi
+    if [[ $d =~ ^[+]([0-9]+)$ ]] && [ ! -d "$d"* ]; then
+        eval printf -v d .%.0s \{1..$((${BASH_REMATCH[1]} + 1))\}
+    fi
     while [[ ! -d $d ]] && [[ ${d:${#x}} =~ (^|/)([.]{3,})(/.*)?$ ]]; do
         x=${d:0:(${#d} - ${#BASH_REMATCH[3]})}
         if [[ ! -d $x ]]; then
@@ -15,7 +21,7 @@ cd(){
             d=${d:0:(${#d} - ${#BASH_REMATCH[0]})}${BASH_REMATCH[1]}${y}${BASH_REMATCH[3]}
         fi
     done
-    builtin pushd "$d" > /dev/null && /bin/ls --almost-all --color=auto
+    builtin cd "$d" > /dev/null && command ls --almost-all --color=auto
 }
 
 cd_undo(){
@@ -48,12 +54,9 @@ cd_undo(){
     fi
 }
 
-    # bind cd undo to readline keyseq ESC ESC.
-    if [[ $(declare -F cd_undo) = cd_undo ]]; then
-        bind -r '"\e\e"'
-        bind -x '"\e\e"  :cd_undo'
-        bind -x '"\e\e\e":cd_undo'
-    fi
+# bind cd undo to readline keyseq ESC ESC.
+if [[ $(declare -F cd_undo) = cd_undo ]]; then
+    bind -r '"\e\e"'
+    bind -x '"\e\e"  :cd_undo'
+    bind -x '"\e\e\e":cd_undo'
 fi
-
-##
